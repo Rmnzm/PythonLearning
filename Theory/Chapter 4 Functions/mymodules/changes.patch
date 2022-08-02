@@ -1,0 +1,24 @@
+diff --git a/pytest_pep8.py b/pytest_pep8.py
+index 6e6cd7e..0b7ad62 100644
+--- a/pytest_pep8.py
++++ b/pytest_pep8.py
+@@ -35,7 +35,7 @@ def pytest_collect_file(path, parent):
+     if config.option.pep8 and path.ext == '.py':
+         pep8ignore = config._pep8ignore(path)
+         if pep8ignore is not None:
+-            return Pep8Item(path, parent, pep8ignore, config._max_line_length)
++            return Pep8Item.from_parent(fspath=path, parent=parent, pep8ignore=pep8ignore, max_line_length=config._max_line_length)
+
+
+ def pytest_sessionfinish(session):
+@@ -50,8 +50,8 @@ class Pep8Error(Exception):
+
+ class Pep8Item(pytest.Item, pytest.File):
+
+-    def __init__(self, path, parent, pep8ignore, max_line_length):
+-        super(Pep8Item, self).__init__(path, parent)
++    def __init__(self, fspath, parent, pep8ignore, max_line_length):
++        super(Pep8Item, self).__init__(fspath, parent)
+         self.add_marker("pep8")
+         self.pep8ignore = pep8ignore
+         self.max_line_length = max_line_length
